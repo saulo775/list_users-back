@@ -1,0 +1,187 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "listUsers Documentation",
+    "description": "This is an api of register users",
+    "version": "1.0.0",
+    "contact": {
+      "email": "saulovictor775@hotmail.com"
+    }    
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+            "Aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "User name sample",
+                  "email": "email@sampleemail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "201":{
+            "description": "Created",
+            "content": {
+              "Aplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already exists"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary":"Find all users",
+        "description": "if you are an admin search for all registered users",
+        "parameters": [{
+          "name": "user_id",
+          "in": "header",
+          "description": "ID of user admin",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "example": {
+              "user_id": "296ab236-40ed-4099-b75e-941578894343"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "Aplication/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "make user in admin",
+        "description": "make a regular user an admin user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID of user admin",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": {
+                "user_id": "296ab236-40ed-4099-b75e-941578894343"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "Aplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "get by id",
+        "description": "get user by id",
+        "parameters": [{
+          "name": "user_id",
+          "in": "path",
+          "description": "Id of user",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "296ab236-40ed-4099-b75e-941578894343"
+          }
+        }],
+        "responses": {
+          "200":{
+            "description": "Success",
+            "content": {
+              "Application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+    } 
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type":"string"
+          },
+          "admin": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
